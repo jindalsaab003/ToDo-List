@@ -16,7 +16,14 @@ export default function AuthForm() {
     setIsSubmitting(true);
     setMessage("");
     const result = isSignUp
-      ? await supabase.auth.signUp({ email, password })
+      ? await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            // Works for localhost in development and the current Vercel URL in production.
+            emailRedirectTo: window.location.origin,
+          },
+        })
       : await supabase.auth.signInWithPassword({ email, password });
 
     if (result.error) {
